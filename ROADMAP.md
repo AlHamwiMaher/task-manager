@@ -64,26 +64,21 @@
 ---
 
 ## Current Status (update this before starting a new chat)
-
-Last completed: Phase 2 — full CRUD REST routes built with in-memory mock data (GET, POST, PUT, DELETE for /tasks), including route params, req.body, status codes, and express.json() middleware
-Next step: Phase 3 — connect MongoDB Atlas, set up Mongoose, replace mock array with real Task model
-Known issues: MongoDB Atlas setup paused — will fix and connect in Phase 3
+Last completed: Phase 3 — connected MongoDB Atlas, set up Mongoose, replaced 
+in-memory array with real Task model, learned Git and pushed project to GitHub
+Next step: Phase 4 — restructure the project (separate route files), then add 
+user authentication with JWT
+Known issues: none
 
 ## Template to paste at the start of a new chat
-
 ```
 I'm learning MERN stack by building a Task Manager project with you.
 Here's my current status from ROADMAP.md:
-
-Last completed: Phase 2 — full CRUD REST routes built with in-memory mock data
-(GET, POST, PUT, DELETE for /tasks), including route params, req.body, 
-status codes, and express.json() middleware
-
-Next step: Phase 3 — connect MongoDB Atlas, set up Mongoose, replace mock 
-array with real Task model
-
-Known issues: MongoDB Atlas setup paused — will fix and connect in Phase 3
-
+Last completed: Phase 3 — connected MongoDB Atlas, set up Mongoose, replaced
+in-memory array with real Task model, learned Git and pushed project to GitHub
+Next step: Phase 4 — restructure the project (separate route files), then add
+user authentication with JWT
+Known issues: none
 Please continue from here, same teaching style as before:
 explain concepts as we hit them, I know JS basics but not Node/Express/React yet,
 CSS beginner level, English only.
