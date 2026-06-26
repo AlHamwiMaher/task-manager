@@ -6,10 +6,11 @@ const authMiddleware = (req,res,next) => {
     const userJWT = req.headers.authorization.split(" ")[1]
     try{
         const decodedToken = jwt.verify(userJWT, process.env.JWT_SECRET )
-        req.userId = decodedToken.userId
+        req.user = decodedToken
         next()
     }catch(err){
         return res.status(401).json({ message: "Invalid Token"})
     }
 }
 module.exports = authMiddleware
+

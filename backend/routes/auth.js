@@ -21,7 +21,7 @@ router.post ('/login' , async (req,res) =>{
         const isMatch = await bcrypt.compare(userPassword, savedUserDocument.password)
         if (isMatch){
             const token = jwt.sign(
-                {userId: savedUserDocument.id},
+                {id: savedUserDocument.id},
                 process.env.JWT_SECRET,
                 {expiresIn : '7d'}
             )
