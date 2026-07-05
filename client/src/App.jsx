@@ -1,7 +1,12 @@
-import TaskList from './TaskList'
-
+import TaskList from './components/TaskList'
+import Login from './pages/Login'
+import Dashboard from './pages/Dashboard'
+import Register from './pages/Register'
+import TaskDetail from './pages/Taskdetail'
+import ProtectedRoute from './components/ProtectedRoute'
+import NotFound from './pages/NotFound'
 import { useState, useEffect } from 'react'
-
+import {BrowserRouter , Routes , Route} from 'react-router-dom'
 function App() {
 
 const [tasks , setTasks] = useState([
@@ -14,8 +19,8 @@ const [newTask , setNewTask] = useState("")
 
 
 useEffect(() => {
-  console.log("page loaded") ,[]
-})
+  console.log("page loaded") 
+},[])
 
 useEffect(() => {
   console.log("tasks changed:", tasks)
@@ -27,19 +32,29 @@ function handleAddTask (e){
   setNewTask("")
 }
 
+function handleDeleteTask (taskId){
+  const originalTasks = tasks.filter(taskObject => taskObject.id != taskId)
+  setTasks(originalTasks)
+}
+
 return(
- <div>
-  <div>
-    <h1>Task Manager</h1>
-  </div>
-    <TaskList title="My Tasks" tasks={tasks}/>
-    <form onSubmit={handleAddTask}>
-    <input type="text" name='newTaskAdd' value={newTask} onChange={(e) => setNewTask(e.target.value)}/>
-      <button name='newTaskAdd' type='submit' >
-          Add New Task
-          </button>
-          </form>
-    </div>
+  <BrowserRouter>
+    <Routes>
+      <Route path='/login' element={<Login />} />
+      <Route path='/register' element={<Register />} />
+
+      <Route path='/dashboard' element={        
+        <ProtectedRoute>
+          <Dashboard />
+          </ProtectedRoute>} />
+
+      <Route path='/tasks/:id' element={
+        <ProtectedRoute>
+          <TaskDetail />
+          </ProtectedRoute>} />
+          <Route path='/*' element={<NotFound />} />
+    </Routes>
+  </BrowserRouter>
   )
 }
 
