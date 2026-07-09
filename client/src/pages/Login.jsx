@@ -1,8 +1,10 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate , useLocation} from "react-router-dom"
 function Login (){
     const navigate = useNavigate()
+    const location = useLocation()
     function handleLogin (){
-        navigate('/dashboard')
+        const destination = location.state?.from || '/dashboard'
+        navigate(destination)
     }
     return (
     <div>

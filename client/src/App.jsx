@@ -7,6 +7,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import NotFound from './pages/NotFound'
 import { useState, useEffect } from 'react'
 import {BrowserRouter , Routes , Route} from 'react-router-dom'
+import PublicOnlyRoute from './components/PublicOnlyRoute'
 function App() {
 
 const [tasks , setTasks] = useState([
@@ -40,8 +41,18 @@ function handleDeleteTask (taskId){
 return(
   <BrowserRouter>
     <Routes>
-      <Route path='/login' element={<Login />} />
-      <Route path='/register' element={<Register />} />
+      
+      <Route path='/login' element={
+        <PublicOnlyRoute>
+          <Login />
+        </PublicOnlyRoute>
+      } />
+
+      <Route path='/register' element={
+        <PublicOnlyRoute>
+          <Register />
+        </PublicOnlyRoute>
+      } />
 
       <Route path='/dashboard' element={        
         <ProtectedRoute>
