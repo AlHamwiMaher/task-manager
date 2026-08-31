@@ -1,0 +1,29 @@
+.notfound{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    color: var(--color-primary);
+    flex-direction: column;
+    font-size: 3rem;
+}
+.home-button{
+    background-color: var(--color-bg-secondary);
+    border: 3px solid var(--color-border);
+    border-radius: 6px;
+    height: 4rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+.home-link{
+    text-decoration: none;
+    font-size: 2.5rem;
+    color: var(--color-primary);
+}
+.home-button:hover{
+    background-color: var(--color-primary);
+    color: var(--color-bg-secondary);
+    .home-link{
+        color: var(--color-bg-secondary);
+    }
+}
