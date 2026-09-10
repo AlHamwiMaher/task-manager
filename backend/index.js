@@ -13,6 +13,9 @@ app.use(express.json());
 app.use(cors({origin : allowedOrigins}))
 app.use('/tasks', taskRouter)
 app.use('/auth', authRouter)
+app.get('/health' , (req , res) =>{
+    return res.status(200).json({'message' : 'ok'})
+}) 
 app.use(errorHandler)
 
 async function startServer() {

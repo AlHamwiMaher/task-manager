@@ -155,20 +155,405 @@
 
 ---
 
-- [ ] **Phase 10 — Deployment**
-  - Frontend → Vercel, Backend → Render, DB → MongoDB Atlas
-  - ⚠️ Missing / still to cover (old + audit pass, merged):
-    - Production builds (`npm run build`) — go deeper (don't skip)
-    - Environment variables in production (Render/Vercel) — go deeper (don't skip)
-    - CORS config for production domains — go deeper (don't skip)
-    - Reading Render logs — go deeper (don't skip)
-    - End-to-end testing after deployment — go deeper (don't skip)
-    - MongoDB Atlas Network Access whitelist (`0.0.0.0/0` for Render) — deploys silently fail to connect otherwise — go deeper (don't skip)
-    - Monorepo deploy config — telling Vercel/Render which subfolder (`client/` vs backend root) to build from — go deeper (don't skip)
-    - `VITE_` env vars are bundled into the build and are public, not secret — go deeper (don't skip)
-    - Render free-tier cold starts (backend sleeps, first request is slow) — go deeper (don't skip)
-    - Health check endpoint (`GET /health`) for deployment debugging — go deeper (don't skip)
-    - Production debugging workflow (browser DevTools → Network → Render logs → MongoDB Atlas) — go deeper (don't skip)
+# Phase 10 — Deployment
+
+**Goal:** Deploy the MERN Task Manager to production and understand the essential concepts behind deploying a full-stack application.
+
+### Deployment Stack
+
+* **Frontend → Vercel**
+* **Backend → Render**
+* **Database → MongoDB Atlas**
+
+---
+
+## 10.1 — Understand Production vs Development
+
+Understand the basic difference between:
+
+```text
+Development
+
+React → localhost:3000/5173
+Express → localhost
+MongoDB Atlas
+```
+
+and:
+
+```text
+Production
+
+Vercel → Render → MongoDB Atlas
+```
+
+Understand that production uses different URLs, environment variables, and hosting infrastructure.
+
+---
+
+## 10.2 — Production Build
+
+Learn what a production build is.
+
+Practice:
+
+```bash
+npm run build
+```
+
+Understand:
+
+* What the build does
+* What the `dist/` folder is
+* Why we build before deploying
+* Difference between development and production builds
+* How to recognize a build failure
+
+Don't go deeply into optimization yet.
+
+---
+
+## 10.3 — Environment Variables
+
+Learn the basics of production environment variables.
+
+Understand:
+
+* `.env`
+* `.gitignore`
+* Vercel environment variables
+* Render environment variables
+* Why secrets should never be committed to GitHub
+
+For this project, understand the difference between:
+
+```text
+Frontend:
+VITE_API_URL
+```
+
+and backend secrets such as:
+
+```text
+MONGO_URI
+JWT_SECRET
+```
+
+---
+
+## 10.4 — `VITE_` Variables
+
+Learn this important rule:
+
+> **Anything beginning with `VITE_` is public.**
+
+Understand why:
+
+```text
+VITE_API_URL
+```
+
+is okay in the frontend, while:
+
+```text
+MONGO_URI
+JWT_SECRET
+```
+
+must remain on the backend.
+
+No advanced frontend security yet.
+
+---
+
+## 10.5 — MongoDB Atlas Network Access
+
+Prepare MongoDB Atlas for Render.
+
+Learn:
+
+* Why Render needs access to Atlas
+* Atlas Network Access
+* `0.0.0.0/0`
+* Why the backend may fail to connect if Atlas blocks Render
+* Basic security consideration of allowing access from anywhere
+
+---
+
+## 10.6 — Production CORS
+
+Update CORS so that:
+
+```text
+Vercel frontend
+       ↓
+Render backend
+```
+
+can communicate.
+
+Understand:
+
+* What CORS is
+* Why localhost worked during development
+* Why the Vercel domain is different
+* How to allow the production frontend origin
+
+Keep this basic for now.
+
+---
+
+## 10.7 — Monorepo Deployment Configuration
+
+Our project contains the frontend and backend separately.
+
+Understand that the hosting platforms need to know **which folder they are deploying**.
+
+### Vercel
+
+Deploy:
+
+```text
+client/
+```
+
+### Render
+
+Deploy the backend.
+
+Learn the basics of:
+
+* Root directory
+* Build command
+* Start command
+* Output directory
+
+---
+
+## 10.8 — Deploy the Backend to Render
+
+Deploy the Express backend.
+
+Learn:
+
+* Connect GitHub repository
+* Select the correct directory
+* Configure build/start commands
+* Add environment variables
+* Deploy
+* Verify that the server starts successfully
+
+---
+
+## 10.9 — Health Check Endpoint
+
+Add a simple:
+
+```http
+GET /health
+```
+
+endpoint.
+
+Use it to answer:
+
+> “Is my deployed backend actually running?”
+
+Test the endpoint after deployment.
+
+This gives us a simple way to separate:
+
+```text
+Backend problem
+```
+
+from:
+
+```text
+Frontend problem
+```
+
+---
+
+## 10.10 — Basic Render Logs
+
+Learn how to:
+
+* Open Render logs
+* Recognize a deployment/build error
+* Recognize a backend startup error
+* Recognize a basic runtime error
+* Find useful error messages
+
+We don't need advanced monitoring yet.
+
+---
+
+## 10.11 — Render Cold Starts
+
+Understand the basic concept:
+
+> The free Render backend may sleep when inactive.
+
+Therefore:
+
+* The first request may be slow
+* Later requests may be faster
+* A slow first request does not automatically mean the application is broken
+
+That's enough for this project.
+
+---
+
+## 10.12 — Deploy the Frontend to Vercel
+
+Deploy the React/Vite frontend.
+
+Learn:
+
+* Connect GitHub
+* Select `client/`
+* Configure the production build
+* Add `VITE_API_URL`
+* Deploy
+* Open the public application
+
+---
+
+## 10.13 — End-to-End Testing
+
+After both deployments are complete, test the **real production application**.
+
+Verify:
+
+### Authentication
+
+* Register
+* Login
+* Logout
+
+### Dashboard
+
+* Load tasks
+* Add task
+* Complete/uncomplete task
+* Delete task
+
+### Profile
+
+* Load profile
+* Change password
+* Delete account
+
+### Password reset
+
+* Forgot password
+* Reset password
+
+The important thing is confirming:
+
+```text
+Browser
+   ↓
+Vercel
+   ↓
+Render
+   ↓
+MongoDB Atlas
+```
+
+works as one complete application.
+
+---
+
+## 10.14 — Basic Production Debugging
+
+Learn one simple debugging workflow:
+
+```text
+Something doesn't work
+        ↓
+Browser DevTools
+        ↓
+Network tab
+        ↓
+Check request + response
+        ↓
+Check Render logs
+        ↓
+Check MongoDB Atlas if necessary
+```
+
+Learn to identify whether the problem is likely:
+
+* Frontend
+* API URL
+* CORS
+* Backend
+* Environment variable
+* MongoDB connection
+
+---
+
+## 10.15 — Basic Deployment Security Check
+
+Before finishing, verify:
+
+* `.env` is not committed to GitHub
+* MongoDB credentials are only on Render
+* JWT secret is only on Render
+* No secrets use `VITE_`
+* Production CORS is configured
+* MongoDB Atlas is accessible from Render
+* Application works over HTTPS
+
+No advanced security audit yet.
+
+---
+
+# Phase 10 Completion Criteria
+
+Phase 10 is complete when:
+
+* [ ] Production build works
+* [ ] Backend is deployed to Render
+* [ ] Frontend is deployed to Vercel
+* [ ] MongoDB Atlas connects successfully
+* [ ] Environment variables are configured correctly
+* [ ] Production CORS works
+* [ ] `/health` works
+* [ ] Basic Render logs are understood
+* [ ] Render cold starts are understood
+* [ ] Full application works end-to-end
+* [ ] Basic production debugging is understood
+* [ ] Basic deployment security has been checked
+
+### What we intentionally DON'T cover deeply yet
+
+We will save these for **Project 2 — Shoe Outlet E-commerce**:
+
+* Advanced performance optimization
+* CDN and caching strategies
+* Advanced DNS/domain configuration
+* CI/CD pipelines
+* Docker
+* VPS/server administration
+* Advanced security
+* Production monitoring
+* Logging infrastructure
+* Database performance optimization
+* Image optimization
+* SEO
+* Scaling
+* Load balancing
+* Advanced deployment architecture
+* Advanced Hostinger deployment
+* Production cost optimization
+
+**Phase 10 is about getting your first real application online and understanding the fundamentals.**
+
+**Project 2 is where we go professional.**
+
 
 ---
 
