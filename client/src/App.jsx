@@ -22,6 +22,12 @@ function App() {
           </PublicOnlyRoute>
         } />
 
+        <Route path='/' element={
+          <PublicOnlyRoute>
+            <Login />
+          </PublicOnlyRoute>
+        } />
+
         <Route path='/register' element={
           <PublicOnlyRoute>
             <Register />
@@ -43,7 +49,7 @@ function App() {
             <ResetPassword />
           </PublicOnlyRoute>
         }/>
-
+      
         <Route path='/recoveraccount' element={
           <PublicOnlyRoute>
             <ForgetPassword />
